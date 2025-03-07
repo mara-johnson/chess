@@ -17,6 +17,10 @@ import javax.swing.*;
 
 //You will be implmenting a part of a function and a whole function in this document. Please follow the directions for the 
 //suggested order of completion that should make testing easier.
+//Modified by Mara Johnson
+//Date: 3/6/25
+//Description of modifications/additions: set up the chess board and put my pieces(pawns) in the correct location.
+//Also modified mouseReleased method to move a selected piece from one location to another(if allowed) and highlighted legal moves in red in the mouseDragged method.
 @SuppressWarnings("serial")
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
 	// Resource location constants for piece images
@@ -54,15 +58,28 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         this.g = g;
         board = new Square[8][8];
         setLayout(new GridLayout(8, 8, 0, 0));
+        Graphics color;
 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-
-        //TO BE IMPLEMENTED FIRST
      
-      //for (.....)  
-//        	populate the board with squares here. Note that the board is composed of 64 squares alternating from 
-//        	white to black.
+      
+// Creates a chess board with alternating color(black and white) squares using for loops.
+//The first for loop accounts for the 8 rows needed for the board while the second one adds the squares by column to each row
+//in the correct location on the board.
+        for(int r = 0; r < 8; r++){
+            for(int c = 0; c < 8; c++){
+                if((r % 2 == 0 && c % 2 == 0) || (r % 2 == 1 && c % 2 == 1)){
+                board[r][c] = new Square(this, true, r, c);
+                } else {
+                board[r][c] = new Square(this, false, r, c);
+                }
+                this.add(board[r][c]);
+            }
+                
+            }
+        
+
 
         initializePieces();
 
@@ -80,8 +97,14 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//since we only have one kind of piece for now you need only set the same number of pieces on either side.
 	//it's up to you how you wish to arrange your pieces.
     private void initializePieces() {
-    	
-    	board[0][0].put(new Piece(true, RESOURCES_WKING_PNG));
+    //Sets up the location of the pawns(according to the proper rules of chess)
+    //The white pieces fill up the second to last row while the black pieces fill up the row second from the top
+        for(int i = 0; i < 8; i++){
+            board[6][i].put(new Piece(true, RESOURCES_WPAWN_PNG));
+        }
+        for(int i = 0; i < 8; i++){
+            board[1][i].put(new Piece(false, RESOURCES_BPAWN_PNG));
+        }
 
     }
 
@@ -150,19 +173,35 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseReleased(MouseEvent e) {
         Square endSquare = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
         
-        //using currPiece
+        for(Square[] row: board){
+            for(Square s : row){
+            s.setBorder(null);
+            }
+        }
+
+        //Checks if a requested move is legal, and if it is, the piece will move on the screen to the requested location
+        //Also switches whose turn it is.
+       if(currPiece.getLegalMoves(this, fromMoveSquare).contains(endSquare)){
+        endSquare.put(currPiece);
+        fromMoveSquare.removePiece();
+        whiteTurn = !whiteTurn;
+       }
         
-       
         fromMoveSquare.setDisplay(true);
         currPiece = null;
         repaint();
+        
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         currX = e.getX() - 24;
         currY = e.getY() - 24;
-
+        //sets the border color for the legal moves of a dragged piece to red.
+            for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)){
+                s.setBorder(BorderFactory.createLineBorder(Color.red));
+            }
+        
         repaint();
     }
 
