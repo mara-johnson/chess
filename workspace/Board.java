@@ -100,10 +100,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     //Sets up the location of the pawns(according to the proper rules of chess)
     //The white pieces fill up the second to last row while the black pieces fill up the row second from the top
         for(int i = 0; i < 8; i++){
-            board[6][i].put(new Piece(true, RESOURCES_WPAWN_PNG));
+            board[6][i].put(new Pawn(true, RESOURCES_WPAWN_PNG));
         }
         for(int i = 0; i < 8; i++){
-            board[1][i].put(new Piece(false, RESOURCES_BPAWN_PNG));
+            board[1][i].put(new Pawn(false, RESOURCES_BPAWN_PNG));
         }
 
     }
