@@ -17,14 +17,12 @@ import javax.imageio.ImageIO;
 //you will need to implement two functions in this file.
 public class Pawn extends Piece {
 
-    private boolean pieceColor;
     public Pawn(boolean color, String img_file){
       super(color, img_file);
-      pieceColor = color;
     }
 
     public String toString(){
-      if(pieceColor == true){
+      if(color == true){
         return "A white Pawn.";
       } else{
         return "A black Pawn.";
@@ -100,7 +98,7 @@ public class Pawn extends Piece {
             return moves;
            }
            //if there is a square in front of the piece and it is not occupied, it is a legal move and added to the moves ArrayList
-           if(currentRow - 1 > 0 && !b.getSquareArray()[currentRow - 1][currentCol].isOccupied()){
+           if(currentRow - 1 >= 0 && !b.getSquareArray()[currentRow - 1][currentCol].isOccupied()){
             moves.add(b.getSquareArray()[currentRow - 1][currentCol]);
            }
           //if it is the pawn's first turn(judged via typical location on the board) and the square two above the pawn isn't occupied
