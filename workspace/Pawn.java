@@ -134,6 +134,7 @@ public class Pawn extends Piece {
             moves.add(s);
           }
         }
+        
         }
         //returns the moves ArrayList
         return moves;
